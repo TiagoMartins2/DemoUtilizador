@@ -23,6 +23,14 @@ public class UtilizadorController {
     private ComputerRepository computerRepository;
 
 
+    //KEYCLOAK
+    private String authServerUrl = "http://localhost:8080/auth";
+    private String real = "springBootKeycloak";
+    private String clientID = "login-app";
+    private String role = "user";
+    private String clientSecret = "3b5dd2d1-95c3-4bdb-bf8c-7bf980efc1ec";
+
+
     @PostMapping("/saveUser")
     public Utilizador criarUtilizador(@RequestBody UtilizadorRequest request){
         return utilizadorRepository.save(request.getUtilizador());

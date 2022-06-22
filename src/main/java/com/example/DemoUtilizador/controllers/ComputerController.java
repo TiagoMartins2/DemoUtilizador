@@ -9,7 +9,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,15 +25,10 @@ public class ComputerController {
     private UtilizadorRepository utilizadorRepository;
 
 
-
-
-
     @GetMapping("/getRecent")
     public List<Computer> getRepoComputer(){
         return computerRepository.getRecentComputer();
     }
-
-
 
 
     @Scheduled(fixedRate = 1000*5)
@@ -50,12 +44,6 @@ public class ComputerController {
             System.out.println(p.getModelo());
         });
     }
-
-
-
-
-
-
 
 
     @PostMapping("/saveComputer")

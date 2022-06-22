@@ -1,3 +1,4 @@
+server.port: 8180
 spring:
   h2:
     console:
@@ -17,3 +18,9 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
+keycloak:
+  realm: utilizadores
+  auth-server-url: http://localhost:8080/auth
+  ssl-required: external
+
