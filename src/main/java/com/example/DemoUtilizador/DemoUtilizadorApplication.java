@@ -20,11 +20,12 @@ public class DemoUtilizadorApplication {
 		return "Hello Docker World";
 	}
 
-
+/*
 	@Scheduled(fixedRate = 1000*60)
 	public static void ss() {
 		System.out.println("ugga");
 	}
+	*/
 
 
 	public static void main(String[] args) {

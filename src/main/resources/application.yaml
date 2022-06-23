@@ -20,6 +20,8 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 keycloak:
-  realm: utilizadores
+  realm: Springboot-keycloak
   auth-server-url: http://localhost:8080/auth
-  ssl-required: external
+  resource: utilizadores
+  clientId: login-app
+  secret: b4859226-8a50-44a6-bcc1-21f049d03a1c
