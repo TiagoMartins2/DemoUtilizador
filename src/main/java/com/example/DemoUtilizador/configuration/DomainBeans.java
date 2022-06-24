@@ -4,11 +4,15 @@ import org.keycloak.KeycloakPrincipal;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import static org.keycloak.OAuth2Constants.CLIENT_CREDENTIALS;
 
+
+@EnableAutoConfiguration(exclude = { SecurityAutoConfiguration.class}) //Para desativar a configuração automática
 @Configuration
 public class DomainBeans {
 
@@ -28,4 +32,5 @@ public class DomainBeans {
     public Keycloak keycloak(){
         return KeycloakBuilder.builder().grantType(CLIENT_CREDENTIALS).serverUrl(url).realm(realm).clientId(clientId).clientSecret(secret).build();
     }
+
 }
