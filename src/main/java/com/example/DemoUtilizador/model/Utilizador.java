@@ -17,12 +17,13 @@ import java.util.Set;
 public class Utilizador {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int bi;
-
-    private String nome;
     private String username;
+    private String email;
     private String password;
+    private String firstname;
+    private String lasname;
 
     @OneToMany(targetEntity = Computer.class,cascade = CascadeType.ALL)
     @JoinColumn(name= "uc_fk", referencedColumnName = "bi")

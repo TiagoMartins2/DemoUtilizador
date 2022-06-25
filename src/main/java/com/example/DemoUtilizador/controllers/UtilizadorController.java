@@ -1,14 +1,19 @@
 package com.example.DemoUtilizador.controllers;
 
 
+import com.example.DemoUtilizador.configuration.DomainBeans;
 import com.example.DemoUtilizador.model.Utilizador;
 import com.example.DemoUtilizador.repository.ComputerRepository;
 import com.example.DemoUtilizador.repository.UtilizadorRepository;
 import com.example.DemoUtilizador.dto.UtilizadorRequest;
+import com.example.DemoUtilizador.service.KeycloakService;
+import jdk.jshell.execution.Util;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,10 +27,22 @@ public class UtilizadorController {
     @Autowired
     private ComputerRepository computerRepository;
 
+    @Autowired
+    private KeycloakService keycloakService;
+
+    @Autowired
+    private DomainBeans domainBeans;
+
+    public UtilizadorController(KeycloakService keyService, DomainBeans dbeans){
+        this.domainBeans = dbeans;
+        this.keycloakService = keyService;
+    }
 
     @PostMapping("/saveUser")
-    public Utilizador criarUtilizador(@RequestBody UtilizadorRequest request){
-        return utilizadorRepository.save(request.getUtilizador());
+    public ResponseEntity<?> criarUtilizador(@RequestBody Utilizador user){
+        utilizadorRepository.save(user);
+        Response createdResponse = keycloakService.createKeycloakUser(user);
+        return ResponseEntity.status(createdResponse.getStatus()).build();
     }
 
 

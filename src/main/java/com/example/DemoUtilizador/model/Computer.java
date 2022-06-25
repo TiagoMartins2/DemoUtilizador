@@ -24,6 +24,7 @@ import java.util.Date;
 public class Computer {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String modelo;
 
