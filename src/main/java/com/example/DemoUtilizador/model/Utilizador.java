@@ -28,4 +28,6 @@ public class Utilizador {
     @OneToMany(targetEntity = Computer.class,cascade = CascadeType.ALL)
     @JoinColumn(name= "uc_fk", referencedColumnName = "bi")
     private List<Computer> computers;
+
+
 }

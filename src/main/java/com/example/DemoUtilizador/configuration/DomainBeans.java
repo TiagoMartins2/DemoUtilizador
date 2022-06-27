@@ -3,6 +3,7 @@ package com.example.DemoUtilizador.configuration;
 import org.jboss.resteasy.client.jaxrs.ResteasyClient;
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.keycloak.KeycloakPrincipal;
+import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,7 +41,7 @@ public class DomainBeans {
     public Keycloak getInstance(){
         if(keycloak == null){
             return KeycloakBuilder.builder()
-                    .grantType(CLIENT_CREDENTIALS)
+                    .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
                     .serverUrl(url)
                     .realm(realm)
                     .clientId(clientId)

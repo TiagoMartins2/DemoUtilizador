@@ -6,17 +6,17 @@ import com.example.DemoUtilizador.model.Utilizador;
 import com.example.DemoUtilizador.repository.ComputerRepository;
 import com.example.DemoUtilizador.repository.UtilizadorRepository;
 import com.example.DemoUtilizador.service.KeycloakService;
+import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/utilizador")
+@RequestMapping("api/user")
 public class UtilizadorController {
 
     @Autowired
@@ -36,16 +36,24 @@ public class UtilizadorController {
         this.keycloakService = keyService;
     }
 
-    @PostMapping("/saveUser")
-    public ResponseEntity<?> criarUtilizador(@RequestBody Utilizador user){
+
+    @PostMapping
+    public String criarUtilizador(@RequestBody Utilizador user){
         utilizadorRepository.save(user);
-        Response createdResponse = keycloakService.createKeycloakUser(user);
-        return ResponseEntity.status(createdResponse.getStatus()).build();
+        try{
+            keycloakService.addUser(user);
+            return "User adicionado na base de dados com sucesso";
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return "Algo deu mal ao inserir o utilizador na base de dados " + e;
+        }
     }
 
 
     @GetMapping("/getAll")
     public List<Utilizador> findAllUsers(){
+
         return utilizadorRepository.findAll();
     }
 
@@ -54,6 +62,7 @@ public class UtilizadorController {
     public Optional<Utilizador> getUtilizadorbyBI(@PathVariable Integer bi){
         return utilizadorRepository.findById(bi);
     }
+
 
 
     @PutMapping("/editbyID/{bi}")
@@ -72,5 +81,13 @@ public class UtilizadorController {
         }catch (Exception e){
             return "Delete feito sem sucesso";
         }
+    }
+
+
+
+
+    @GetMapping("/get{username}")
+    public List<Utilizador> getUser(@RequestParam(value = "username") String username){
+        return utilizadorRepository.findByUsername(username);
     }
 }
