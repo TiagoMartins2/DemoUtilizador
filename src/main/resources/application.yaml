@@ -1,5 +1,6 @@
 server:
   port: 9090
+
 spring:
   h2:
     console:
@@ -21,7 +22,6 @@ spring:
       matching-strategy: ant_path_matcher
 keycloak:
   realm: Springboot-keycloak
-  auth-server-url: http://localhost:8080/auth
-  resource: utilizadores
+  auth-server-url: http://host.docker.internal:8080/auth #nao reconhece o keycloak
   clientId: login-app
-  secret: b4859226-8a50-44a6-bcc1-21f049d03a1c
+  secret: 9f53735a-bde8-46a7-8f1c-436de8ecce61

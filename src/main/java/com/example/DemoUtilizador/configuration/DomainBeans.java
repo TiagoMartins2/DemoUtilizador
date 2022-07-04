@@ -31,7 +31,7 @@ public class DomainBeans {
     @Value("${keycloak.secret}")
     public String secret;
 
-    private static Keycloak keycloak = null;
+
 
     public DomainBeans(){
 
@@ -39,11 +39,10 @@ public class DomainBeans {
 
     @Bean
     public Keycloak getInstance(){
-        if(keycloak == null){
             return KeycloakBuilder.builder()
-                    .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
                     .serverUrl(url)
                     .realm(realm)
+                    .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
                     .clientId(clientId)
                     .clientSecret(secret)
                     .resteasyClient(
@@ -51,8 +50,6 @@ public class DomainBeans {
                                     .connectionPoolSize(10).build()
                     )
                     .build();
-        }
-        return keycloak;
     }
 
 }

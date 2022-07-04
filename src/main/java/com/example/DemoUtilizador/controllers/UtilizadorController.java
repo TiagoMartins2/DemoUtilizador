@@ -6,17 +6,17 @@ import com.example.DemoUtilizador.model.Utilizador;
 import com.example.DemoUtilizador.repository.ComputerRepository;
 import com.example.DemoUtilizador.repository.UtilizadorRepository;
 import com.example.DemoUtilizador.service.KeycloakService;
-import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/user")
+@RequestMapping("/utilizadores")
 public class UtilizadorController {
 
     @Autowired
@@ -31,25 +31,26 @@ public class UtilizadorController {
     @Autowired
     private DomainBeans domainBeans;
 
+
+
+
     public UtilizadorController(KeycloakService keyService, DomainBeans dbeans){
         this.domainBeans = dbeans;
         this.keycloakService = keyService;
     }
 
 
-    @PostMapping
-    public String criarUtilizador(@RequestBody Utilizador user){
-        utilizadorRepository.save(user);
-        try{
-            keycloakService.addUser(user);
-            return "User adicionado na base de dados com sucesso";
-        }
-        catch(Exception e){
-            e.printStackTrace();
-            return "Algo deu mal ao inserir o utilizador na base de dados " + e;
+
+    @PostMapping(value = "/addUsers", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String criarUtilizador(@RequestBody Utilizador user) {
+        this.utilizadorRepository.save(user);
+        try {
+            this.keycloakService.addUser(user);
+            return "Sucesso";
+        }catch(Exception e){
+            return "Erro";
         }
     }
-
 
     @GetMapping("/getAll")
     public List<Utilizador> findAllUsers(){
@@ -74,17 +75,9 @@ public class UtilizadorController {
 
 
     @DeleteMapping("/deletebyBI/{bi}")
-    public String deleteUtilizador(@PathVariable Integer bi){
-        try{
+    public void deleteUtilizador(@PathVariable Integer bi){
             utilizadorRepository.deleteById(bi);
-            return "Delete feito com sucesso";
-        }catch (Exception e){
-            return "Delete feito sem sucesso";
-        }
     }
-
-
-
 
     @GetMapping("/get{username}")
     public List<Utilizador> getUser(@RequestParam(value = "username") String username){

@@ -1,46 +1,52 @@
 package com.example.DemoUtilizador.service;
 
-import com.example.DemoUtilizador.configuration.DomainBeans;
 import com.example.DemoUtilizador.model.Utilizador;
-import lombok.AllArgsConstructor;
-import org.h2.engine.User;
-import org.keycloak.admin.client.resource.UsersResource;
+import lombok.extern.slf4j.Slf4j;
+import org.keycloak.admin.client.Keycloak;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.ws.rs.core.Response;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
+@Slf4j
 @Service
 public class KeycloakService {
 
     @Value("${keycloak.realm}")
     public String realm;
 
-    private final DomainBeans domainB;
+    @Autowired
+    private Keycloak keycloak;
 
-    public KeycloakService(DomainBeans domainBeans){
-        this.domainB = domainBeans;
+    //@Autowired
+    //private final DomainBeans domainB;
+
+    public KeycloakService(Keycloak keycloak){
+        this.keycloak = keycloak;
     }
 
-    public void addUser(Utilizador utilizador){
-        UsersResource usersResource = domainB.getInstance().realm(realm).users();
-
+    public Response addUser(Utilizador utilizador){
         CredentialRepresentation credentialRepresentation = createPasswordCredentials(utilizador.getPassword());
+
         UserRepresentation user = new UserRepresentation();
         user.setUsername(utilizador.getUsername());
-        user.setCredentials(Collections.singletonList(credentialRepresentation));
         user.setFirstName(utilizador.getFirstname());
-        user.setLastName(utilizador.getLasname());
+        user.setLastName(utilizador.getLastname());
+        user.setCredentials(Collections.singletonList(credentialRepresentation));
         user.setEmail(utilizador.getEmail());
         user.setEnabled(true);
-        user.setEmailVerified(false);
+        //user.setEmailVerified(false);
+        //user.setRealmRoles(Arrays.asList("admin"));
 
-        UsersResource instance = getInstance();
-        instance.create(user);
+
+        try(Response response = this.keycloak.realm(realm).users().create(user)){
+            System.out.println(response.toString());
+            return response;
+        }
     }
 
     private static CredentialRepresentation createPasswordCredentials(String password) {
@@ -50,11 +56,5 @@ public class KeycloakService {
         passwordCredentials.setValue(password);
         return passwordCredentials;
     }
-
-    public UsersResource getInstance(){
-        return domainB.getInstance().realm(domainB.realm).users();
-    }
-
-
 
 }

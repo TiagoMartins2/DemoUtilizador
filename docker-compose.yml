@@ -5,6 +5,8 @@ services:
     image: dnxt/demos/demo-utilizador
     ports:
       - "8081:9090"
+    networks:
+      - learning_ntw
   keycloak:
     image: jboss/keycloak:4.8.3.Final
     restart: on-failure
@@ -30,14 +32,21 @@ services:
       - "8080:8080"
     depends_on:
       - keycloak-db
+    networks:
+      - learning_ntw
   keycloak-db:
     image: postgres:10
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: keycloakdb
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: demo
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - learning_ntw
 
 volumes:
   pgdata:
+
+networks:
+  learning_ntw:

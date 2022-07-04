@@ -13,6 +13,7 @@ import java.util.Set;
 @Data
 @Entity
 @ToString
+@EqualsAndHashCode
 @Table(name = "Utilizador")
 public class Utilizador {
 
@@ -23,7 +24,7 @@ public class Utilizador {
     private String email;
     private String password;
     private String firstname;
-    private String lasname;
+    private String lastname;
 
     @OneToMany(targetEntity = Computer.class,cascade = CascadeType.ALL)
     @JoinColumn(name= "uc_fk", referencedColumnName = "bi")
